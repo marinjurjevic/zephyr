@@ -7,3 +7,19 @@ project(wifi)
 
 FILE(GLOB app_sources src/*.c)
 target_sources(app PRIVATE ${app_sources})
+
+set(gen_dir ${ZEPHYR_BINARY_DIR}/include/generated/)
+
+foreach(inc_file
+	ca.der
+	device.der
+	device_key.der
+    )
+  generate_inc_file_for_target(
+    app
+    src/test_mosquitto_org/${inc_file}
+    ${gen_dir}/${inc_file}.inc
+    )
+endforeach()
+
+add_subdirectory(modules/mqtt_service)
